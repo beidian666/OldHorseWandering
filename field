@@ -1,0 +1,158 @@
+#include<stdio.h>
+#include<stdlib.h>
+void judge(int m,int n,int **matrix,int x,int y,int cnt,char direction)
+{
+    if(direction=='d')
+    {
+        while(matrix[x+1][y]==1)
+        {
+            x++;
+            cnt++;
+            if(x==m-1)
+            {
+                printf("%d %d %d\n",x+1,y+1,cnt);
+                return;
+            }
+        }
+        if(matrix[x][y-1]==1)
+        {
+            judge(m,n,matrix,x,y-1,cnt+1,'l');
+        }
+        else if(matrix[x][y+1]==1)
+        {
+            judge(m,n,matrix,x,y+1,cnt+1,'r');
+        }
+        else
+        {
+            judge(m,n,matrix,x-1,y,cnt+1,'u');
+        }
+    }
+    if(direction=='u')
+    {
+        while(matrix[x-1][y]==1)
+        {
+            x--;
+            cnt++;
+            if(x==0)
+            {
+                printf("%d %d %d\n",x+1,y+1,cnt);
+                return;
+            }
+        }
+        if(matrix[x][y+1]==1)
+        {
+            judge(m,n,matrix,x,y+1,cnt+1,'r');
+        }
+        else if(matrix[x][y-1]==1)
+        {
+            judge(m,n,matrix,x,y-1,cnt+1,'l');
+        }
+        else
+        {
+            judge(m,n,matrix,x+1,y,cnt+1,'d');
+        }
+    }
+    if(direction=='l')
+    {
+        while(matrix[x][y-1]==1)
+        {
+            y--;
+            cnt++;
+            if(y==0)
+            {
+                printf("%d %d %d\n",x+1,y+1,cnt);
+                return;
+            }
+        }
+        if(matrix[x-1][y]==1)
+        {
+            judge(m,n,matrix,x-1,y,cnt+1,'u');
+        }
+        else if(matrix[x+1][y]==1)
+        {
+            judge(m,n,matrix,x+1,y,cnt+1,'d');
+        }
+        else
+        {
+            judge(m,n,matrix,x,y+1,cnt+1,'r');
+        }
+    }
+    if(direction=='r')
+    {
+        while(matrix[x][y+1]==1)
+        {
+            y++;
+            cnt++;
+            if(y==n-1)
+            {
+                printf("%d %d %d\n",x+1,y+1,cnt);
+                return;
+            }
+        }
+        if(matrix[x+1][y]==1)
+        {
+            judge(m,n,matrix,x+1,y,cnt+1,'d');
+        }
+        else if(matrix[x-1][y]==1)
+        {
+            judge(m,n,matrix,x-1,y,cnt+1,'u');
+        }
+        else
+        {
+            judge(m,n,matrix,x,y-1,cnt+1,'l');
+        }
+    }
+}
+int main()
+{
+    int N;
+    scanf("%d",&N);
+    while(N>0)
+    {
+        int **field;
+        int n,m,r;
+        scanf("%d %d %d",&m,&n,&r);
+        field=(int**)malloc(sizeof(int*)*m);
+        for(int i=0;i<m;i++)
+        {
+            field[i]=(int*)malloc(sizeof(int)*n);
+        }
+        for(int i=0;i<m;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                field[i][j]=1;
+            }
+        }
+        while(r>0)
+        {
+            int col,row;
+            scanf("%d %d",&col,&row);
+            field[col-1][row-1]=0;
+            r--;
+        }
+        int x,y;
+        scanf("%d %d",&x,&y);
+        x--;
+        y--;
+        char direction;
+        if(x==0)
+        {
+            direction='d';
+        }
+        if(y==0)
+        {
+            direction='r';
+        }
+        if(x==m-1)
+        {
+            direction='u';
+        }
+        if(y==n-1)
+        {
+            direction='l';
+        }
+        judge(m,n,field,x,y,1,direction);
+        N--;
+    }
+}
